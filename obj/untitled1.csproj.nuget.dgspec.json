@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\untitled1\\untitled1.csproj": {}
+    "D:\\bt-lapTrinhWeb\\untitled1.csproj": {}
   },
   "projects": {
-    "D:\\untitled1\\untitled1.csproj": {
+    "D:\\bt-lapTrinhWeb\\untitled1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\untitled1\\untitled1.csproj",
+        "projectUniqueName": "D:\\bt-lapTrinhWeb\\untitled1.csproj",
         "projectName": "untitled1",
-        "projectPath": "D:\\untitled1\\untitled1.csproj",
+        "projectPath": "D:\\bt-lapTrinhWeb\\untitled1.csproj",
         "packagesPath": "C:\\Users\\pc\\.nuget\\packages\\",
-        "outputPath": "D:\\untitled1\\obj\\",
+        "outputPath": "D:\\bt-lapTrinhWeb\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -49,6 +49,12 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

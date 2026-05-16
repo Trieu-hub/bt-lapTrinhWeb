@@ -16,10 +16,10 @@
 
         <div class="nav__links">
             <a asp-area="" asp-controller="Home" asp-action="Index" data-i18n="nav.home">Trang Chủ</a>
-            <a href="#" data-i18n="nav.tvShows">TV Shows</a>
+            <a asp-controller="TVShows" asp-action="Index" data-i18n="nav.tvShows">TV Shows</a>
             <a href="#" data-i18n="nav.movies">Phim Lẻ</a>
             <a href="#" data-i18n="nav.newHot">Mới &amp; Hot</a>
-            <a href="#" data-i18n="nav.watchlist">Danh Sách</a>
+            <a asp-controller="Product" asp-action="List" data-i18n="nav.watchlist">Danh Sách</a>
         </div>
 
         <div class="nav__right">
