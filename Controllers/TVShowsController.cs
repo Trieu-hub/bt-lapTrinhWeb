@@ -16,7 +16,7 @@ namespace untitled1.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var tvShows = await _context.Movies.ToListAsync(); // Showing all for now, can filter by genre if needed
+            var tvShows = await _context.Movies.Where(m => m.IsTVSeries).ToListAsync();
             return View(tvShows);
         }
     }

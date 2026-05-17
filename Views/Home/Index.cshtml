@@ -86,7 +86,7 @@
     <!-- Horizontal scroll (top 10) -->
     <div class="trending__track" id="trendingTrack">
 
-        <div class="t-card">
+        <a href="/Product/Detail/1" class="t-card" style="display: block; text-decoration: none; color: inherit;">
             <img class="t-card__img"
                 src="~/images/movies/1.jpg"
                 onerror="this.src='~/images/movies/1.jpg'" alt="Breaking Bad" loading="lazy" />
@@ -98,9 +98,9 @@
                 <div class="t-card__name">Breaking Bad</div>
                 <div class="t-card__meta"><span class="t-card__genre">Crime</span>2008</div>
             </div>
-        </div>
+        </a>
 
-        <div class="t-card">
+        <a href="/Product/Detail/2" class="t-card" style="display: block; text-decoration: none; color: inherit;">
             <img class="t-card__img"
                 src="~/images/movies/2.jpg"
                 onerror="this.src='~/images/movies/2.jpg'" alt="Game of Thrones" loading="lazy" />
@@ -112,9 +112,9 @@
                 <div class="t-card__name">Game of Thrones</div>
                 <div class="t-card__meta"><span class="t-card__genre">Fantasy</span>2011</div>
             </div>
-        </div>
+        </a>
 
-        <div class="t-card">
+        <a href="/Product/Detail/3" class="t-card" style="display: block; text-decoration: none; color: inherit;">
             <img class="t-card__img"
                 src="~/images/movies/3.jpg"
                 onerror="this.src='~/images/movies/3.jpg'" alt="Oppenheimer" loading="lazy" />
@@ -126,9 +126,9 @@
                 <div class="t-card__name">Oppenheimer</div>
                 <div class="t-card__meta"><span class="t-card__genre">Drama</span>2023</div>
             </div>
-        </div>
+        </a>
 
-        <div class="t-card">
+        <a href="/Product/Detail/4" class="t-card" style="display: block; text-decoration: none; color: inherit;">
             <img class="t-card__img"
                 src="~/images/movies/4.jpg"
                 onerror="this.src='~/images/movies/4.jpg'" alt="Avengers: Infinity War" loading="lazy" />
@@ -140,9 +140,9 @@
                 <div class="t-card__name">Avengers: Infinity War</div>
                 <div class="t-card__meta"><span class="t-card__genre">Action</span>2018</div>
             </div>
-        </div>
+        </a>
 
-        <div class="t-card">
+        <a href="/Product/Detail/5" class="t-card" style="display: block; text-decoration: none; color: inherit;">
             <img class="t-card__img"
                 src="~/images/movies/5.jpg"
                 onerror="this.src='~/images/movies/5.jpg'" alt="Fight Club" loading="lazy" />
@@ -154,9 +154,9 @@
                 <div class="t-card__name">Fight Club</div>
                 <div class="t-card__meta"><span class="t-card__genre">Thriller</span>1999</div>
             </div>
-        </div>
+        </a>
 
-        <div class="t-card">
+        <a href="/Product/Detail/6" class="t-card" style="display: block; text-decoration: none; color: inherit;">
             <img class="t-card__img"
                 src="~/images/movies/6.jpg"
                 onerror="this.src='~/images/movies/6.jpg'" alt="The Dark Knight" loading="lazy" />
@@ -168,9 +168,9 @@
                 <div class="t-card__name">The Dark Knight</div>
                 <div class="t-card__meta"><span class="t-card__genre">Action</span>2008</div>
             </div>
-        </div>
+        </a>
 
-        <div class="t-card">
+        <a href="/Product/Detail/7" class="t-card" style="display: block; text-decoration: none; color: inherit;">
             <img class="t-card__img"
                 src="~/images/movies/7.jpg"
                 onerror="this.src='~/images/movies/7.jpg'" alt="Interstellar" loading="lazy" />
@@ -182,9 +182,9 @@
                 <div class="t-card__name">Interstellar</div>
                 <div class="t-card__meta"><span class="t-card__genre">Sci-Fi</span>2014</div>
             </div>
-        </div>
+        </a>
 
-        <div class="t-card">
+        <a href="/Product/Detail/8" class="t-card" style="display: block; text-decoration: none; color: inherit;">
             <img class="t-card__img"
                 src="~/images/movies/8.jpg"
                 onerror="this.src='~/images/movies/8.jpg'" alt="Wednesday" loading="lazy" />
@@ -196,9 +196,9 @@
                 <div class="t-card__name">Wednesday</div>
                 <div class="t-card__meta"><span class="t-card__genre">Horror</span>2022</div>
             </div>
-        </div>
+        </a>
 
-        <div class="t-card">
+        <a href="/Product/Detail/9" class="t-card" style="display: block; text-decoration: none; color: inherit;">
             <img class="t-card__img"
                 src="~/images/movies/9.jpg"
                 onerror="this.src='~/images/movies/9.jpg'" alt="Squid Game" loading="lazy" />
@@ -210,9 +210,9 @@
                 <div class="t-card__name">Squid Game</div>
                 <div class="t-card__meta"><span class="t-card__genre">Thriller</span>2021</div>
             </div>
-        </div>
+        </a>
 
-        <div class="t-card">
+        <a href="/Product/Detail/10" class="t-card" style="display: block; text-decoration: none; color: inherit;">
             <img class="t-card__img"
                 src="~/images/movies/10.jpg"
                 onerror="this.src='~/images/movies/10.jpg'" alt="Spider-Man: NWH" loading="lazy" />
@@ -224,7 +224,7 @@
                 <div class="t-card__name">Spider-Man: NWH</div>
                 <div class="t-card__meta"><span class="t-card__genre">Action</span>2021</div>
             </div>
-        </div>
+        </a>
 
     </div>
 
@@ -484,7 +484,7 @@
             if (allMoviesOpen) {
                 if (!grid.children.length) {
                     grid.innerHTML = ALL_MOVIES.map((m, i) => `
-                <div class="t-card" style="animation-delay:${i * 0.04}s">
+                <a href="/Product/Detail/${m.num}" class="t-card" style="animation-delay:${i * 0.04}s; display: block; text-decoration: none; color: inherit;">
                   <img class="t-card__img" src="${m.img}" onerror="this.src='/images/movies/${m.num}.jpg'" alt="${m.title}" loading="lazy"/>
                   <span class="t-card__num">${m.num}</span>
                   <div class="t-card__play"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
@@ -492,7 +492,7 @@
                     <div class="t-card__name">${m.title}</div>
                     <div class="t-card__meta"><span class="t-card__genre">${m.genre}</span>${m.year}</div>
                   </div>
-                </div>`).join('');
+                </a>`).join('');
                 }
                 wrap.classList.add('open');
                 btn.classList.add('expanded');
