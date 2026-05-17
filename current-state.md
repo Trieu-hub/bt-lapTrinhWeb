@@ -1,52 +1,43 @@
-# Nhật Ký Phát Triển Dự Án FILMIX - 16/05/2026
+# Nhật Ký Phát Triển Dự Án FILMIX - Cập nhật ngày 17/05/2026
 
-## 1. Các công việc đã hoàn thành
+## 1. Các công việc và chỉnh sửa đã hoàn thành hôm nay
 
-### 🖼️ Địa phương hóa hình ảnh (Localizing Assets)
-- Tải toàn bộ ảnh phim từ các nguồn ngoài (Picsum, Wikipedia) về thư mục `wwwroot/images/`.
-- Phân chia thư mục khoa học: `/hero`, `/movies`, `/tvshows`, `/auth`.
-- Cập nhật toàn bộ mã nguồn để sử dụng đường dẫn cục bộ, giúp trang web chạy nhanh và ổn định hơn.
+### 🆕 Thêm Danh mục mới ("Phim Lẻ" & "Mới & Hot")
+- Tạo `MoviesController.cs` và `NewHotController.cs`.
+- Thiết kế giao diện riêng biệt với `movies.css` và `newhot.css`.
+- Xây dựng Razor Views (`Views/Movies/Index.cshtml`, `Views/NewHot/Index.cshtml`).
+- Cập nhật liên kết trên thanh điều hướng (`_Layout.cshtml`).
 
-### 📺 Trang TV Shows (Netflix Style)
-- Xây dựng trang `/TVShows` với giao diện cuộn ngang đặc trưng của Netflix.
-- Có Hero section nổi bật cho phim "Stranger Things".
-- Đã kết nối với Database để lấy danh sách phim động.
+### 🛠 Cấu trúc Database & Kiến trúc mới (Movies Entity)
+- Sửa lỗi Namespace không đồng nhất gây lỗi biên dịch.
+- Hỗ trợ đa nền tảng cơ sở dữ liệu: Thêm tùy chọn `DbProvider` trong `appsettings.json` để chuyển đổi dễ dàng giữa **MySQL** và **SQL Server** cho các thành viên trong team.
+- Tái cấu trúc thực thể `Movie`: 
+  - Thêm quan hệ nhiều-nhiều (Many-to-Many) với `Category` thông qua bảng `MovieCategory`.
+  - Thêm quan hệ một-nhiều (One-to-Many) với `Episode` để hỗ trợ hiển thị danh sách các tập phim cho TV Series.
+- Đồng bộ dữ liệu hạt giống (Seed Data) của DB với các phim hiển thị ngoài trang chủ để không bị lỗi.
 
-### 🔍 Tính năng lọc theo Danh mục (Product Filtering)
-- Xây dựng trang `/Product/List` cho phép xem danh sách phim.
-- Tích hợp bộ lọc theo `categoryId` (Hành động, Kinh dị, Viễn tưởng...).
-- Giao diện lưới (Grid) đáp ứng, tự động co giãn theo màn hình.
+### 🎬 Nâng cấp giao diện & Tính năng (Detail Page & Watchlist)
+- Tạo trang **Chi tiết phim chuẩn Netflix** (`/Product/Detail/{id}`) với hero banner lớn, danh sách thể loại động, bộ chọn Season và các tập phim.
+- Khắc phục lỗi **không click được vào thẻ phim**: Đã bọc các thẻ phim ở Trang Chủ, trang TV Shows và Danh Sách bằng thẻ `<a>`.
+- Thiết kế giao diện **Tab 2 cột chuyên nghiệp** cho trang `/Product/List`:
+  - **Tab 1:** Khám Phá Phim (mặc định, lọc theo thể loại).
+  - **Tab 2:** Danh Sách Của Tôi (hiển thị phim được lưu trong bộ nhớ máy khách).
 
-### 🗄️ Tích hợp Cơ sở dữ liệu MySQL
-- Kết nối thành công với MySQL (User: `root`, Pass: `123456`).
-- Tự động tạo Database `filmix_db` và các bảng `Categories`, `Movies` khi khởi chạy ứng dụng.
-- Đã nạp dữ liệu mẫu (Seeding) trực tiếp vào DB.
-- Chuyển đổi logic từ dữ liệu "cứng" sang truy vấn SQL thực tế.
-
-### 📁 Tổ chức lại thư mục (Refactoring)
-- Sắp xếp lại mã nguồn theo chuẩn chuyên nghiệp:
-    - `Models/Entities/`: Chứa các thực thể dữ liệu.
-    - `Models/ViewModels/`: Chứa các Model phục vụ hiển thị.
-- Cập nhật toàn bộ Namespace và các câu lệnh `using` để hệ thống không bị lỗi sau khi di chuyển file.
+### 🐛 Fix Bugs (Các lỗi ẩn đã xử lý)
+- **Lỗi Cartesian Explosion trong EF Core**: Khi fetch Movies kèm theo `Episodes` và `MovieCategories`, ứng dụng bị crash. Đã fix triệt để bằng cách thêm `.AsSplitQuery()` vào ProductController.
+- **Lỗi LocalStorage "Danh Sách Của Tôi" (Watchlist)**: Nút "Lưu Danh Sách" trước đó chỉ có hiệu ứng UI mà không lưu ID vào bộ nhớ trình duyệt, khiến Danh Sách Của Tôi luôn trống rỗng. Đã sửa lại JavaScript trong `Detail.cshtml` để đọc/ghi vào `localStorage` chính xác.
 
 ---
 
-## 2. Các lỗi tiềm ẩn & Lưu ý (Potential Bugs)
+## 2. Các Bug / Yêu cầu tính năng còn tồn đọng cần xử lý tiếp
 
-### ⚠️ Khởi động ứng dụng (Startup Crash)
-- **Vấn đề**: Nếu dịch vụ MySQL (Server) chưa được bật hoặc sai mật khẩu, ứng dụng sẽ báo lỗi ngay khi khởi động do lệnh `db.Database.EnsureCreated()` được gọi sớm.
-- **Cách khắc phục**: Đảm bảo MySQL Server đang chạy trước khi F5 project.
+### ⚠️ Chưa đồng bộ thiết kế Nút "Lưu vào danh sách"
+- **Vấn đề**: Các nút thêm vào danh sách ở phần **"Mới & Hot"** và **"Phim Lẻ"** hiện chưa có thiết kế đồng nhất với nút lưu danh sách của mục **TV Shows**.
+- **Yêu cầu**: Cần cập nhật lại mã HTML/CSS của các nút này để thiết kế giống với giao diện của TV Shows.
 
-### ⚠️ Xung đột dữ liệu mẫu (Seeding Conflicts)
-- **Vấn đề**: Lệnh `EnsureCreated()` và `HasData` chỉ hoạt động tốt cho lần đầu tiên. Nếu bạn thay đổi cấu trúc bảng sau này, bạn nên chuyển sang dùng **Migrations** (`dotnet ef migrations`) thay vì cách khởi tạo tự động này.
-
-### ⚠️ Đường dẫn ảnh (Image Paths)
-- **Vấn đề**: Hiện tại ảnh được fix cứng đuôi `.jpg`. Nếu sau này bạn thay thế bằng các ảnh định dạng `.png` hoặc `.webp`, bạn cần cập nhật lại cột `ImageUrl` trong database.
-
-### ⚠️ Hiển thị TV Shows
-- **Vấn đề**: Trang TV Shows hiện đang lấy "tất cả phim" trong bảng `Movies` để hiển thị (chưa lọc riêng thể loại Series).
-- **Cải thiện**: Sau này cần thêm một cột `IsTVSeries` vào bảng `Movies` để lọc chính xác hơn.
+### 🌐 Thiếu tính năng Chuyển đổi Ngôn ngữ (Language Switcher)
+- **Vấn đề**: Hệ thống hiện tại đang hiển thị ngôn ngữ mặc định và chưa có cơ chế thay đổi ngôn ngữ động toàn cục.
+- **Yêu cầu**: Cần tích hợp nút chuyển đổi ngôn ngữ, khi người dùng đổi ngôn ngữ thì **toàn bộ UI của project sẽ thay đổi tức thì** (sử dụng thư viện đa ngôn ngữ hoặc i18n js).
 
 ---
-**Trạng thái hiện tại: 🟢 Ổn định (Stable)**
-Project đã sẵn sàng để phát triển thêm các tính năng như: Đăng nhập thực tế, Xem chi tiết phim, hoặc Tìm kiếm phim.
+**Trạng thái hiện tại: 🟢 Ổn định (Stable)** nhưng còn một số tính năng Frontend chưa hoàn thành theo yêu cầu mới nhất.
