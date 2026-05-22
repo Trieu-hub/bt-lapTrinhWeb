@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using untitled1.Data;
+using untitled1.Models.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -20,6 +21,21 @@ else
         options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 }
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Auth";
+});
 
 var app = builder.Build();
 
@@ -30,8 +46,10 @@ using (var scope = app.Services.CreateScope())
     try
     {
         db.Database.EnsureCreated();
-        // Test query to verify if the schema is up-to-date (checks if Episodes table exists)
+        // Verify all required tables exist (triggers recreate if schema is stale)
         _ = db.Episodes.FirstOrDefault();
+        _ = db.MovieImages.FirstOrDefault();
+        _ = db.Users.FirstOrDefault();
     }
     catch (Exception ex)
     {
@@ -54,22 +72,33 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+// Seed roles and admin accounts
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    await DbSeeder.SeedAsync(roleManager, userManager);
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
-
 {
     app.UseExceptionHandler("/Home/Error");
 }
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
 
 app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();

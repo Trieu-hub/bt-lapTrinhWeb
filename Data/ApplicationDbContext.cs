@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using untitled1.Models.Entities;
 
 namespace untitled1.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -14,6 +15,7 @@ namespace untitled1.Data
         public DbSet<Movie> Movies { get; set; }
         public DbSet<MovieCategory> MovieCategories { get; set; }
         public DbSet<Episode> Episodes { get; set; }
+        public DbSet<MovieImage> MovieImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +40,13 @@ namespace untitled1.Data
                 .HasOne(e => e.Movie)
                 .WithMany(m => m.Episodes)
                 .HasForeignKey(e => e.MovieId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure One-to-Many Movie <-> MovieImage
+            modelBuilder.Entity<MovieImage>()
+                .HasOne(mi => mi.Movie)
+                .WithMany(m => m.MovieImages)
+                .HasForeignKey(mi => mi.MovieId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Seeding Categories
@@ -114,6 +123,59 @@ namespace untitled1.Data
                 // Squid Game - Season 1
                 new Episode { Id = 10, MovieId = 9, SeasonNumber = 1, EpisodeNumber = 1, Title = "Red Light, Green Light (Đèn đỏ, đèn xanh)", VideoUrl = "/videos/sample.mp4" },
                 new Episode { Id = 11, MovieId = 9, SeasonNumber = 1, EpisodeNumber = 2, Title = "Hell (Địa ngục)", VideoUrl = "/videos/sample.mp4" }
+            );
+
+            // Seeding MovieImages (stills gallery)
+            modelBuilder.Entity<MovieImage>().HasData(
+                // Breaking Bad (Id = 1)
+                new MovieImage { Id = 1, MovieId = 1, ImageUrl = "/images/movies/still_action.png" },
+                new MovieImage { Id = 2, MovieId = 1, ImageUrl = "/images/movies/1.jpg" },
+                new MovieImage { Id = 3, MovieId = 1, ImageUrl = "/images/movies/2.jpg" },
+
+                // Game of Thrones (Id = 2)
+                new MovieImage { Id = 4, MovieId = 2, ImageUrl = "/images/movies/still_scifi.png" },
+                new MovieImage { Id = 5, MovieId = 2, ImageUrl = "/images/movies/2.jpg" },
+                new MovieImage { Id = 6, MovieId = 2, ImageUrl = "/images/movies/3.jpg" },
+
+                // Oppenheimer (Id = 3)
+                new MovieImage { Id = 7, MovieId = 3, ImageUrl = "/images/movies/3.jpg" },
+                new MovieImage { Id = 8, MovieId = 3, ImageUrl = "/images/movies/4.jpg" },
+                new MovieImage { Id = 9, MovieId = 3, ImageUrl = "/images/movies/5.jpg" },
+
+                // Avengers: Infinity War (Id = 4)
+                new MovieImage { Id = 10, MovieId = 4, ImageUrl = "/images/movies/still_scifi.png" },
+                new MovieImage { Id = 11, MovieId = 4, ImageUrl = "/images/movies/still_action.png" },
+                new MovieImage { Id = 12, MovieId = 4, ImageUrl = "/images/movies/4.jpg" },
+
+                // Fight Club (Id = 5)
+                new MovieImage { Id = 13, MovieId = 5, ImageUrl = "/images/movies/5.jpg" },
+                new MovieImage { Id = 14, MovieId = 5, ImageUrl = "/images/movies/6.jpg" },
+                new MovieImage { Id = 15, MovieId = 5, ImageUrl = "/images/movies/7.jpg" },
+
+                // The Dark Knight (Id = 6)
+                new MovieImage { Id = 16, MovieId = 6, ImageUrl = "/images/movies/still_action.png" },
+                new MovieImage { Id = 17, MovieId = 6, ImageUrl = "/images/movies/6.jpg" },
+                new MovieImage { Id = 18, MovieId = 6, ImageUrl = "/images/movies/7.jpg" },
+
+                // Interstellar (Id = 7)
+                new MovieImage { Id = 19, MovieId = 7, ImageUrl = "/images/movies/still_scifi.png" },
+                new MovieImage { Id = 20, MovieId = 7, ImageUrl = "/images/movies/7.jpg" },
+                new MovieImage { Id = 21, MovieId = 7, ImageUrl = "/images/movies/8.jpg" },
+
+                // Wednesday (Id = 8)
+                new MovieImage { Id = 22, MovieId = 8, ImageUrl = "/images/movies/8.jpg" },
+                new MovieImage { Id = 23, MovieId = 8, ImageUrl = "/images/movies/9.jpg" },
+                new MovieImage { Id = 24, MovieId = 8, ImageUrl = "/images/movies/10.jpg" },
+
+                // Squid Game (Id = 9)
+                new MovieImage { Id = 25, MovieId = 9, ImageUrl = "/images/movies/9.jpg" },
+                new MovieImage { Id = 26, MovieId = 9, ImageUrl = "/images/movies/10.jpg" },
+                new MovieImage { Id = 27, MovieId = 9, ImageUrl = "/images/movies/1.jpg" },
+
+                // Spider-Man: No Way Home (Id = 10)
+                new MovieImage { Id = 28, MovieId = 10, ImageUrl = "/images/movies/still_scifi.png" },
+                new MovieImage { Id = 29, MovieId = 10, ImageUrl = "/images/movies/10.jpg" },
+                new MovieImage { Id = 30, MovieId = 10, ImageUrl = "/images/movies/1.jpg" }
             );
         }
     }

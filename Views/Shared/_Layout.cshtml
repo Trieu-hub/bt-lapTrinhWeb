@@ -49,7 +49,10 @@
             <div class="nav__profile" id="navProfile" style="display:none;">
                 <div class="nav__avatar" id="navAvatar"></div>
                 <span class="nav__username" id="navUsername"></span>
-                <button class="nav__logout" onclick="logout()" data-i18n="nav.logout">Đăng Xuất</button>
+                <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;margin:0;">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="nav__logout" data-i18n="nav.logout">Đăng Xuất</button>
+                </form>
             </div>
         </div>
     </nav>
@@ -143,5 +146,10 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    @* Sync server-side auth state to localStorage so client-side UI stays consistent *@
+    @if (User.Identity?.IsAuthenticated != true)
+    {
+        <script>localStorage.removeItem('filmix_user');</script>
+    }
 </body>
 </html>
