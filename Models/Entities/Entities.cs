@@ -23,6 +23,9 @@ namespace untitled1.Models.Entities
 
         // One-to-many relationship with Episodes
         public ICollection<Episode> Episodes { get; set; } = new List<Episode>();
+
+        // One-to-many relationship with MovieImages
+        public ICollection<MovieImage> MovieImages { get; set; } = new List<MovieImage>();
     }
 
     // Join Entity for Many-to-Many Movie <-> Category
@@ -43,6 +46,16 @@ namespace untitled1.Models.Entities
         public int EpisodeNumber { get; set; }
         public int SeasonNumber { get; set; }
         public string VideoUrl { get; set; } = string.Empty;
+
+        public int MovieId { get; set; }
+        public Movie Movie { get; set; } = null!;
+    }
+
+    // MovieImage Entity for One-to-Many Movie <-> MovieImage
+    public class MovieImage
+    {
+        public int Id { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
 
         public int MovieId { get; set; }
         public Movie Movie { get; set; } = null!;

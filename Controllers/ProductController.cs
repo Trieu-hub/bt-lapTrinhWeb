@@ -41,6 +41,7 @@ namespace untitled1.Controllers
                 .Include(m => m.Episodes)
                 .Include(m => m.MovieCategories)
                     .ThenInclude(mc => mc.Category)
+                .Include(m => m.MovieImages)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(m => m.Id == id);
 
