@@ -16,6 +16,8 @@ namespace untitled1.Data
         public DbSet<MovieCategory> MovieCategories { get; set; }
         public DbSet<Episode> Episodes { get; set; }
         public DbSet<MovieImage> MovieImages { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,6 +51,27 @@ namespace untitled1.Data
                 .HasForeignKey(mi => mi.MovieId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Configure One-to-Many User <-> Order
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany()
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure One-to-Many Order <-> OrderItem
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Order)
+                .WithMany(o => o.OrderItems)
+                .HasForeignKey(oi => oi.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure One-to-Many Movie <-> OrderItem
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.Movie)
+                .WithMany()
+                .HasForeignKey(oi => oi.MovieId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Seeding Categories
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Hành Động" },
@@ -60,16 +83,16 @@ namespace untitled1.Data
 
             // Seeding Movies (removed direct CategoryId column)
             modelBuilder.Entity<Movie>().HasData(
-                new Movie { Id = 1, Title = "Breaking Bad", ImageUrl = "/images/movies/1.jpg", Year = 2008, Genre = "Crime/Drama", IsTVSeries = true },
-                new Movie { Id = 2, Title = "Game of Thrones", ImageUrl = "/images/movies/2.jpg", Year = 2011, Genre = "Action/Fantasy", IsTVSeries = true },
-                new Movie { Id = 3, Title = "Oppenheimer", ImageUrl = "/images/movies/3.jpg", Year = 2023, Genre = "Drama/History", IsTVSeries = false },
-                new Movie { Id = 4, Title = "Avengers: Infinity War", ImageUrl = "/images/movies/4.jpg", Year = 2018, Genre = "Action/Sci-Fi", IsTVSeries = false },
-                new Movie { Id = 5, Title = "Fight Club", ImageUrl = "/images/movies/5.jpg", Year = 1999, Genre = "Drama/Thriller", IsTVSeries = false },
-                new Movie { Id = 6, Title = "The Dark Knight", ImageUrl = "/images/movies/6.jpg", Year = 2008, Genre = "Action/Drama", IsTVSeries = false },
-                new Movie { Id = 7, Title = "Interstellar", ImageUrl = "/images/movies/7.jpg", Year = 2014, Genre = "Sci-Fi/Drama", IsTVSeries = false },
-                new Movie { Id = 8, Title = "Wednesday", ImageUrl = "/images/movies/8.jpg", Year = 2022, Genre = "Horror/Fantasy", IsTVSeries = true },
-                new Movie { Id = 9, Title = "Squid Game", ImageUrl = "/images/movies/9.jpg", Year = 2021, Genre = "Action/Thriller", IsTVSeries = true },
-                new Movie { Id = 10, Title = "Spider-Man: No Way Home", ImageUrl = "/images/movies/10.jpg", Year = 2021, Genre = "Action/Sci-Fi", IsTVSeries = false }
+                new Movie { Id = 1, Title = "Breaking Bad", ImageUrl = "/images/movies/1.jpg", Year = 2008, Genre = "Crime/Drama", IsTVSeries = true, Price = 120000 },
+                new Movie { Id = 2, Title = "Game of Thrones", ImageUrl = "/images/movies/2.jpg", Year = 2011, Genre = "Action/Fantasy", IsTVSeries = true, Price = 150000 },
+                new Movie { Id = 3, Title = "Oppenheimer", ImageUrl = "/images/movies/3.jpg", Year = 2023, Genre = "Drama/History", IsTVSeries = false, Price = 99000 },
+                new Movie { Id = 4, Title = "Avengers: Infinity War", ImageUrl = "/images/movies/4.jpg", Year = 2018, Genre = "Action/Sci-Fi", IsTVSeries = false, Price = 79000 },
+                new Movie { Id = 5, Title = "Fight Club", ImageUrl = "/images/movies/5.jpg", Year = 1999, Genre = "Drama/Thriller", IsTVSeries = false, Price = 50000 },
+                new Movie { Id = 6, Title = "The Dark Knight", ImageUrl = "/images/movies/6.jpg", Year = 2008, Genre = "Action/Drama", IsTVSeries = false, Price = 69000 },
+                new Movie { Id = 7, Title = "Interstellar", ImageUrl = "/images/movies/7.jpg", Year = 2014, Genre = "Sci-Fi/Drama", IsTVSeries = false, Price = 89000 },
+                new Movie { Id = 8, Title = "Wednesday", ImageUrl = "/images/movies/8.jpg", Year = 2022, Genre = "Horror/Fantasy", IsTVSeries = true, Price = 99000 },
+                new Movie { Id = 9, Title = "Squid Game", ImageUrl = "/images/movies/9.jpg", Year = 2021, Genre = "Action/Thriller", IsTVSeries = true, Price = 110000 },
+                new Movie { Id = 10, Title = "Spider-Man: No Way Home", ImageUrl = "/images/movies/10.jpg", Year = 2021, Genre = "Action/Sci-Fi", IsTVSeries = false, Price = 79000 }
             );
 
             // Seeding Many-to-Many connections (MovieCategory)

@@ -1,0 +1,100 @@
+@model untitled1.Models.Entities.Order
+@{
+    ViewData["Title"] = "Chi Tiết Đơn Hàng #" + Model.Id + " - FILMIX";
+}
+
+<div class="order-details-page" style="background: #141414; color: #fff; min-height: 100vh; padding: 120px 5% 80px 5%; font-family: 'Outfit', sans-serif;">
+    <div class="details-container" style="max-width: 1000px; margin: 0 auto; display: grid; gap: 30px;">
+        
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+            <h1 style="font-size: 2.2rem; font-weight: 800; margin: 0; border-left: 5px solid #e50914; padding-left: 15px;">
+                Chi Tiết Đơn Hàng #@Model.Id
+            </h1>
+            <a asp-action="Index" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: 700; font-size: 0.9rem; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+                ← Quay Lại Lịch Sử
+            </a>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1.1fr; gap: 30px; align-items: start;">
+            <!-- Left: Order Items list -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 25px; backdrop-filter: blur(10px); display: grid; gap: 20px;">
+                <h3 style="margin: 0; font-size: 1.2rem; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+                    Sản Phẩm Đã Mua
+                </h3>
+
+                <div style="display: grid; gap: 20px;">
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <div style="width: 80px; aspect-ratio: 16/9; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); background: #2f2f2f;">
+                                    <img src="@item.Movie.ImageUrl" alt="@item.Movie.Title" style="width: 100%; height: 100%; object-fit: cover;" />
+                                </div>
+                                <div>
+                                    <h4 style="margin: 0; font-size: 1.05rem; font-weight: 700; color: #fff;">@item.Movie.Title</h4>
+                                    <span style="font-size: 0.85rem; color: #999;">
+                                        Đơn giá: <strong style="color: #ccc;">@item.Price.ToString("N0") đ</strong> | Số lượng: <strong>@item.Quantity</strong>
+                                    </span>
+                                </div>
+                            </div>
+                            <span style="font-size: 1.1rem; font-weight: 700; color: #46d369;">@((item.Price * item.Quantity).ToString("N0")) đ</span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Right: Customer Info & Order Summary -->
+            <div style="display: grid; gap: 30px;">
+                <!-- Customer Info -->
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 25px; backdrop-filter: blur(10px);">
+                    <h3 style="margin: 0; font-size: 1.2rem; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 15px;">
+                        Thông Tin Giao Nhận
+                    </h3>
+                    <div style="display: grid; gap: 10px; font-size: 0.9rem; color: #ccc;">
+                        <div>Họ tên: <strong style="color: #fff; float: right;">@Model.CustomerName</strong></div>
+                        <div>Email: <strong style="color: #fff; float: right;">@Model.CustomerEmail</strong></div>
+                        <div>Điện thoại: <strong style="color: #fff; float: right;">@Model.PhoneNumber</strong></div>
+                    </div>
+                </div>
+
+                <!-- Receipt Summary -->
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 25px; backdrop-filter: blur(10px);">
+                    <h3 style="margin: 0; font-size: 1.2rem; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 15px;">
+                        Hóa Đơn Chi Tiết
+                    </h3>
+                    <div style="display: grid; gap: 12px; font-size: 0.9rem; color: #ccc;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Tạm tính</span>
+                            <span>@Model.Subtotal.ToString("N0") VNĐ</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Thuế VAT (10%)</span>
+                            <span>@Model.Tax.ToString("N0") VNĐ</span>
+                        </div>
+                        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.08); margin: 5px 0;" />
+                        <div style="display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 800; color: #fff;">
+                            <span>Tổng tiền</span>
+                            <span style="color: #46d369;">@Model.Total.ToString("N0") VNĐ</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px;">
+                            <span>Trạng thái</span>
+                            <span style="background: rgba(70, 211, 105, 0.1); border: 1px solid rgba(70, 211, 105, 0.2); color: #46d369; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">
+                                Hoàn thành
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Force header solid state
+        const nav = document.getElementById('nav');
+        if (nav) nav.classList.add('scrolled');
+    </script>
+}

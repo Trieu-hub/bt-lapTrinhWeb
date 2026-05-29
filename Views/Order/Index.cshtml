@@ -1,0 +1,78 @@
+@model List<untitled1.Models.Entities.Order>
+@{
+    ViewData["Title"] = "Đơn Hàng Của Tôi - FILMIX";
+}
+
+<div class="orders-page" style="background: #141414; color: #fff; min-height: 100vh; padding: 120px 5% 80px 5%; font-family: 'Outfit', sans-serif;">
+    <div class="orders-container" style="max-width: 1000px; margin: 0 auto;">
+        
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 30px; border-left: 5px solid #e50914; padding-left: 15px;">
+            Lịch Sử Đơn Hàng
+        </h1>
+
+        @if (Model.Any())
+        {
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; overflow: hidden; backdrop-filter: blur(10px);">
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02);">
+                                <th style="padding: 18px 24px; font-weight: 700; color: #999;">Mã Đơn Hàng</th>
+                                <th style="padding: 18px 24px; font-weight: 700; color: #999;">Ngày Đặt</th>
+                                <th style="padding: 18px 24px; font-weight: 700; color: #999;">Người Nhận</th>
+                                <th style="padding: 18px 24px; font-weight: 700; color: #999;">Tổng Tiền</th>
+                                <th style="padding: 18px 24px; font-weight: 700; color: #999;">Trạng Thái</th>
+                                <th style="padding: 18px 24px; font-weight: 700; color: #999; text-align: center;">Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var order in Model)
+                            {
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.01)'" onmouseout="this.style.background='transparent'">
+                                    <td style="padding: 18px 24px; font-weight: 700; color: #fff;">#@order.Id</td>
+                                    <td style="padding: 18px 24px; color: #ccc;">@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td style="padding: 18px 24px; color: #ccc;">@order.CustomerName</td>
+                                    <td style="padding: 18px 24px; font-weight: 700; color: #46d369;">@order.Total.ToString("N0") VNĐ</td>
+                                    <td style="padding: 18px 24px;">
+                                        <span style="background: rgba(70, 211, 105, 0.1); border: 1px solid rgba(70, 211, 105, 0.2); color: #46d369; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">
+                                            Hoàn thành
+                                        </span>
+                                    </td>
+                                    <td style="padding: 18px 24px; text-align: center;">
+                                        <a asp-action="Details" asp-route-id="@order.Id" style="background: #e50914; color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 4px; font-size: 0.85rem; font-weight: 700; transition: all 0.2s; display: inline-block;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='none'">
+                                            Chi Tiết
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div style="text-align: center; padding: 80px 20px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04); border-radius: 16px; backdrop-filter: blur(10px);">
+                <div style="background: rgba(255, 255, 255, 0.05); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px auto; color: #888;">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                </div>
+                <h2 style="font-size: 1.6rem; font-weight: 700; margin-bottom: 10px;">Bạn chưa có đơn hàng nào!</h2>
+                <p style="color: #888; max-width: 450px; line-height: 1.5; margin: 0 auto 30px auto;">
+                    Khi mua các tựa phim, bạn sẽ có thể quản lý lịch sử đơn hàng của mình tại đây.
+                </p>
+                <a asp-controller="Home" asp-action="Index" style="background: #e50914; color: #fff; border: none; border-radius: 6px; padding: 12px 28px; font-size: 1rem; font-weight: 700; text-decoration: none; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='none';">
+                    Khám Phá Phim Ngay
+                </a>
+            </div>
+        }
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Force header solid state
+        const nav = document.getElementById('nav');
+        if (nav) nav.classList.add('scrolled');
+    </script>
+}

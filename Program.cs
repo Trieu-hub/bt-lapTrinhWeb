@@ -7,6 +7,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 var dbProvider = builder.Configuration["DbProvider"] ?? "MySql";
 
@@ -47,9 +55,11 @@ using (var scope = app.Services.CreateScope())
     {
         db.Database.EnsureCreated();
         // Verify all required tables exist (triggers recreate if schema is stale)
+        _ = db.Movies.FirstOrDefault();
         _ = db.Episodes.FirstOrDefault();
         _ = db.MovieImages.FirstOrDefault();
         _ = db.Users.FirstOrDefault();
+        _ = db.Orders.FirstOrDefault();
     }
     catch (Exception ex)
     {
@@ -86,6 +96,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
 }
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();
