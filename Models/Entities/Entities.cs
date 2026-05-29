@@ -17,6 +17,7 @@ namespace untitled1.Models.Entities
         public int Year { get; set; }
         public string Genre { get; set; } = string.Empty; // Keeps textual genre overview for reference
         public bool IsTVSeries { get; set; }
+        public decimal Price { get; set; } = 99000;
 
         // Many-to-many relationship with Categories via join table
         public ICollection<MovieCategory> MovieCategories { get; set; } = new List<MovieCategory>();
@@ -59,5 +60,38 @@ namespace untitled1.Models.Entities
 
         public int MovieId { get; set; }
         public Movie Movie { get; set; } = null!;
+    }
+
+    public class Order
+    {
+        public int Id { get; set; }
+        public string UserId { get; set; } = string.Empty;
+        public ApplicationUser User { get; set; } = null!;
+        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
+        
+        public string CustomerName { get; set; } = string.Empty;
+        public string CustomerEmail { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
+        
+        public decimal Subtotal { get; set; }
+        public decimal Tax { get; set; }
+        public decimal Total { get; set; }
+        
+        public string Status { get; set; } = "Completed";
+
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    }
+
+    public class OrderItem
+    {
+        public int Id { get; set; }
+        public int OrderId { get; set; }
+        public Order Order { get; set; } = null!;
+        
+        public int MovieId { get; set; }
+        public Movie Movie { get; set; } = null!;
+        
+        public int Quantity { get; set; }
+        public decimal Price { get; set; }
     }
 }

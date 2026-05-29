@@ -1,0 +1,110 @@
+@model untitled1.Models.ViewModels.CheckoutViewModel
+@{
+    ViewData["Title"] = "Thanh Toán Đơn Hàng - FILMIX";
+    var cart = ViewBag.Cart as List<CartItem> ?? new List<CartItem>();
+}
+
+<div class="checkout-page" style="background: #141414; color: #fff; min-height: 100vh; padding: 120px 5% 80px 5%; font-family: 'Outfit', sans-serif;">
+    <div class="checkout-container" style="max-width: 1200px; margin: 0 auto;">
+        
+        <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 30px; border-left: 5px solid #e50914; padding-left: 15px;">
+            Thông Tin Thanh Toán
+        </h1>
+
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; align-items: start;">
+            <!-- Left: Checkout Form -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 30px; backdrop-filter: blur(10px);">
+                <h3 style="margin-top: 0; margin-bottom: 25px; font-size: 1.3rem; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+                    Thông Tin Khách Hàng
+                </h3>
+
+                <form asp-controller="Checkout" asp-action="PlaceOrder" method="post" style="display: grid; gap: 20px;">
+                    @Html.AntiForgeryToken()
+
+                    <div style="display: grid; gap: 8px;">
+                        <label asp-for="CustomerName" style="font-weight: 600; font-size: 0.95rem; color: #ccc;"></label>
+                        <input asp-for="CustomerName" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 12px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#e50914'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" />
+                        <span asp-validation-for="CustomerName" style="color: #e50914; font-size: 0.85rem; font-weight: 600;"></span>
+                    </div>
+
+                    <div style="display: grid; gap: 8px;">
+                        <label asp-for="CustomerEmail" style="font-weight: 600; font-size: 0.95rem; color: #ccc;"></label>
+                        <input asp-for="CustomerEmail" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 12px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#e50914'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" />
+                        <span asp-validation-for="CustomerEmail" style="color: #e50914; font-size: 0.85rem; font-weight: 600;"></span>
+                    </div>
+
+                    <div style="display: grid; gap: 8px;">
+                        <label asp-for="PhoneNumber" style="font-weight: 600; font-size: 0.95rem; color: #ccc;"></label>
+                        <input asp-for="PhoneNumber" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 12px; color: #fff; font-size: 1rem; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#e50914'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'" />
+                        <span asp-validation-for="PhoneNumber" style="color: #e50914; font-size: 0.85rem; font-weight: 600;"></span>
+                    </div>
+
+                    <div style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; display: flex; gap: 15px;">
+                        <a asp-controller="Cart" asp-action="Index" style="flex: 1; text-align: center; border: 1px solid rgba(255,255,255,0.2); color: #fff; text-decoration: none; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 1.05rem; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                            Quay Lại Giỏ Hàng
+                        </a>
+                        <button type="submit" style="flex: 1.5; background: #e50914; color: #fff; border: none; border-radius: 8px; padding: 14px; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(229, 9, 20, 0.4)'; this.style.filter='brightness(1.1)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none'; this.style.filter='none';">
+                            Đặt Hàng & Thanh Toán
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right: Order Summary -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 30px; backdrop-filter: blur(10px); box-shadow: 0 15px 35px rgba(0,0,0,0.4); display: grid; gap: 20px;">
+                <h3 style="margin: 0; font-size: 1.3rem; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">
+                    Đơn Hàng Của Bạn
+                </h3>
+
+                <!-- Cart Items List -->
+                <div style="display: grid; gap: 15px; max-height: 250px; overflow-y: auto; padding-right: 5px;">
+                    @foreach (var item in cart)
+                    {
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div style="width: 50px; aspect-ratio: 16/9; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                                    <img src="@item.ImageUrl" alt="@item.MovieTitle" style="width: 100%; height: 100%; object-fit: cover;" />
+                                </div>
+                                <div>
+                                    <h4 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: #fff;">@item.MovieTitle</h4>
+                                    <span style="font-size: 0.8rem; color: #888;">SL: @item.Quantity</span>
+                                </div>
+                            </div>
+                            <span style="font-size: 0.95rem; font-weight: 700; color: #46d369;">@item.TotalPrice.ToString("N0") đ</span>
+                        </div>
+                    }
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;" />
+
+                <!-- Totals -->
+                <div style="display: grid; gap: 12px; font-size: 0.95rem; color: #ccc;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Tạm tính</span>
+                        <span>@(((decimal)ViewBag.Subtotal).ToString("N0")) VNĐ</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Thuế VAT (10%)</span>
+                        <span>@(((decimal)ViewBag.Tax).ToString("N0")) VNĐ</span>
+                    </div>
+                    <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 5px 0;" />
+                    <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 800; color: #fff;">
+                        <span>Tổng thanh toán</span>
+                        <span style="color: #46d369;">@(((decimal)ViewBag.Total).ToString("N0")) VNĐ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Force header solid state
+        const nav = document.getElementById('nav');
+        if (nav) nav.classList.add('scrolled');
+    </script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

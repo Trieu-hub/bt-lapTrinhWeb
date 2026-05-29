@@ -33,6 +33,7 @@
                 }
                 
                 <span style="border: 1px solid #46d369; padding: 1px 6px; border-radius: 3px; font-size: 0.8rem; font-weight: 700; color: #46d369;">Ultra HD 4K</span>
+                <span style="border: 1px solid #e50914; padding: 1px 8px; border-radius: 3px; font-size: 0.85rem; font-weight: 700; color: #e50914; background: rgba(229, 9, 20, 0.1);">@Model.Price.ToString("N0") VNĐ</span>
             </div>
             
             <!-- Category Tags -->
@@ -46,7 +47,7 @@
             </div>
 
             <!-- Actions -->
-            <div class="detail-actions" style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <div class="detail-actions" style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
                 <button onclick="playMainVideo()" class="btn btn-red" style="padding: 12px 30px; font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; border-radius: 6px; border: none; cursor: pointer; transition: all 0.2s ease;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                     Xem Ngay
@@ -54,6 +55,16 @@
                 <button onclick="toggleWatchlist(this)" class="btn btn-ghost" style="padding: 12px 30px; font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                     <span>Danh Sách Của Tôi</span>
+                </button>
+                
+                <!-- Quantity & Add to Cart -->
+                <div style="display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.08); padding: 5px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); height: 45px;">
+                    <label for="detailQty" style="font-size: 0.85rem; color: #ccc; font-weight: 600; text-transform: uppercase;">SL:</label>
+                    <input type="number" id="detailQty" value="1" min="1" max="10" style="width: 40px; background: transparent; border: none; color: #fff; font-size: 1rem; font-weight: 700; text-align: center; outline: none;" />
+                </div>
+                <button onclick="addToCart(@Model.Id)" class="btn btn-red" style="padding: 12px 30px; font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; border-radius: 6px; border: none; cursor: pointer; transition: all 0.2s ease; background: #e50914;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    Thêm Vào Giỏ
                 </button>
             </div>
         </div>
@@ -262,6 +273,35 @@
                 modal.style.display = 'none';
                 video.src = "";
             }
+        }
+
+        // Add to Cart AJAX helper
+        function addToCart(movieId) {
+            const qtyInput = document.getElementById('detailQty');
+            const qty = parseInt(qtyInput ? qtyInput.value : 1) || 1;
+            
+            $.ajax({
+                url: '/Cart/AddToCart',
+                type: 'POST',
+                data: { id: movieId, quantity: qty },
+                success: function(response) {
+                    if (response.success) {
+                        showToast(response.message);
+                        
+                        // Update Layout Cart Badge
+                        const badge = document.getElementById('nav-cart-badge');
+                        if (badge) {
+                            badge.textContent = response.cartCount;
+                            badge.style.display = response.cartCount > 0 ? 'flex' : 'none';
+                        }
+                    } else {
+                        showToast(response.message);
+                    }
+                },
+                error: function() {
+                    showToast("Có lỗi xảy ra khi thêm vào giỏ hàng!");
+                }
+            });
         }
 
         // Watchlist toggle toast helper with localStorage persistence
