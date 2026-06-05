@@ -123,9 +123,10 @@
 
         function updateCartQty(movieId, newQty) {
             $.ajax({
-                url: '/Cart/UpdateQuantity',
-                type: 'POST',
-                data: { id: movieId, quantity: newQty },
+                url: `/api/cart/${movieId}`,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({ quantity: newQty }),
                 success: function(response) {
                     if (response.success) {
                         // Update item quantity text
@@ -150,9 +151,8 @@
             if (!confirm("Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?")) return;
 
             $.ajax({
-                url: '/Cart/RemoveFromCart',
-                type: 'POST',
-                data: { id: movieId },
+                url: `/api/cart/${movieId}`,
+                type: 'DELETE',
                 success: function(response) {
                     if (response.success) {
                         const card = document.getElementById(`cart-item-${movieId}`);

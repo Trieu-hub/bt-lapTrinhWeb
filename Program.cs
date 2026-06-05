@@ -7,6 +7,24 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo
+    {
+        Title = "Filmix API",
+        Version = "v1",
+        Description = "REST API for Filmix.\n\n" +
+                      "**Cart endpoints** (`/api/cart`): open access.\n\n" +
+                      "**Admin product endpoints** (`/api/admin/products`): require Admin role — " +
+                      "log in at `/Account/Auth` as an admin before testing here."
+    });
+
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml");
+    if (File.Exists(xmlPath))
+        options.IncludeXmlComments(xmlPath);
+});
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -51,19 +69,19 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     try
     {
         db.Database.EnsureCreated();
-        // Verify all required tables exist (triggers recreate if schema is stale)
+        // Only check core movie tables — failure here means the seed schema is stale and a full wipe is safe.
+        // Identity (Users) and Orders tables are NOT checked here because wiping them would destroy
+        // registered user accounts whenever a new feature table is added.
         _ = db.Movies.FirstOrDefault();
         _ = db.Episodes.FirstOrDefault();
         _ = db.MovieImages.FirstOrDefault();
-        _ = db.Users.FirstOrDefault();
-        _ = db.Orders.FirstOrDefault();
     }
     catch (Exception ex)
     {
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
         logger.LogWarning("Phát hiện database cũ hoặc lỗi cấu trúc bảng: {Message}", ex.Message);
         try
         {
@@ -96,6 +114,13 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
 }
 app.UseRouting();
+
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Filmix Cart API v1");
+    options.RoutePrefix = "swagger";
+});
 
 app.UseSession();
 
