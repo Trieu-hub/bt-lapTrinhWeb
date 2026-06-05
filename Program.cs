@@ -7,6 +7,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo
+    {
+        Title = "Filmix Cart API",
+        Version = "v1",
+        Description = "API endpoints for managing the Filmix shopping cart (view, add, update, delete operations)."
+    });
+});
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -51,19 +62,19 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     try
     {
         db.Database.EnsureCreated();
-        // Verify all required tables exist (triggers recreate if schema is stale)
+        // Only check core movie tables — failure here means the seed schema is stale and a full wipe is safe.
+        // Identity (Users) and Orders tables are NOT checked here because wiping them would destroy
+        // registered user accounts whenever a new feature table is added.
         _ = db.Movies.FirstOrDefault();
         _ = db.Episodes.FirstOrDefault();
         _ = db.MovieImages.FirstOrDefault();
-        _ = db.Users.FirstOrDefault();
-        _ = db.Orders.FirstOrDefault();
     }
     catch (Exception ex)
     {
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
         logger.LogWarning("Phát hiện database cũ hoặc lỗi cấu trúc bảng: {Message}", ex.Message);
         try
         {
@@ -96,6 +107,13 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
 }
 app.UseRouting();
+
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Filmix Cart API v1");
+    options.RoutePrefix = "swagger";
+});
 
 app.UseSession();
 

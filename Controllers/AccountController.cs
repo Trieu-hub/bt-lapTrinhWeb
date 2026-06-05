@@ -36,6 +36,12 @@ namespace untitled1.Controllers
             if (result.Succeeded)
                 return Json(new { success = true, redirectUrl = "/" });
 
+            if (result.IsLockedOut)
+                return Json(new { success = false, message = "Tài khoản đang bị khóa tạm thời" });
+
+            if (result.IsNotAllowed)
+                return Json(new { success = false, message = "Tài khoản chưa được xác nhận email" });
+
             return Json(new { success = false, message = "Email hoặc mật khẩu không đúng" });
         }
 
@@ -55,13 +61,15 @@ namespace untitled1.Controllers
             {
                 UserName = model.Email,
                 Email = model.Email,
-                FullName = model.FullName
+                FullName = model.FullName,
+                EmailConfirmed = true
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, "User");
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return Json(new { success = true, redirectUrl = "/" });
             }
