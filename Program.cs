@@ -12,10 +12,17 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo
     {
-        Title = "Filmix Cart API",
+        Title = "Filmix API",
         Version = "v1",
-        Description = "API endpoints for managing the Filmix shopping cart (view, add, update, delete operations)."
+        Description = "REST API for Filmix.\n\n" +
+                      "**Cart endpoints** (`/api/cart`): open access.\n\n" +
+                      "**Admin product endpoints** (`/api/admin/products`): require Admin role — " +
+                      "log in at `/Account/Auth` as an admin before testing here."
     });
+
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml");
+    if (File.Exists(xmlPath))
+        options.IncludeXmlComments(xmlPath);
 });
 
 builder.Services.AddDistributedMemoryCache();

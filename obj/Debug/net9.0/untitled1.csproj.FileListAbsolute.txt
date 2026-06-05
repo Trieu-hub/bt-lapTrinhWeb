@@ -241,4 +241,11 @@ D:\bt-lapTrinhWeb\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Windows.Extens
 D:\bt-lapTrinhWeb\obj\Debug\net9.0\compressed\eq0c5f556u-24npkihh79.gz
 D:\bt-lapTrinhWeb\obj\Debug\net9.0\compressed\a1r2146wr5-ygnbtj329w.gz
 D:\bt-laptrinhweb\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
-D:\bt-laptrinhweb\obj\Debug\net9.0\compressed\l0x4doyktz-e7582pmobl.gz
+D:\bt-lapTrinhWeb\obj\Debug\net9.0\compressed\l0x4doyktz-j55mlxyc8v.gz
+D:\bt-lapTrinhWeb\obj\Debug\net9.0\untitled1.MvcApplicationPartsAssemblyInfo.cs
+D:\bt-lapTrinhWeb\bin\Debug\net9.0\Microsoft.OpenApi.dll
+D:\bt-lapTrinhWeb\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+D:\bt-lapTrinhWeb\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+D:\bt-lapTrinhWeb\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+D:\bt-lapTrinhWeb\bin\Debug\net9.0\untitled1.xml
+D:\bt-lapTrinhWeb\obj\Debug\net9.0\untitled1.xml

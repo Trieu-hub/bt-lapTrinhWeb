@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>untitled1</name>
+    </assembly>
+    <members>
+        <member name="M:untitled1.Controllers.CartApiController.GetCart">
+            <summary>
+            Retrieve all items currently in the shopping cart along with totals.
+            </summary>
+            <returns>Full cart details with calculations.</returns>
+        </member>
+        <member name="M:untitled1.Controllers.CartApiController.AddToCart(untitled1.Models.DTOs.AddToCartRequest)">
+            <summary>
+            Add a movie to the shopping cart.
+            </summary>
+            <param name="request">The movie ID and quantity to add.</param>
+            <returns>Result status and updated cart count.</returns>
+        </member>
+        <member name="M:untitled1.Controllers.CartApiController.UpdateQuantity(System.Int32,untitled1.Models.DTOs.UpdateCartRequest)">
+            <summary>
+            Update the quantity of a specific item in the cart.
+            </summary>
+            <param name="movieId">The ID of the movie to update.</param>
+            <param name="request">The new quantity.</param>
+            <returns>Result status and updated totals.</returns>
+        </member>
+        <member name="M:untitled1.Controllers.CartApiController.RemoveFromCart(System.Int32)">
+            <summary>
+            Remove a specific item from the cart.
+            </summary>
+            <param name="movieId">The ID of the movie to remove.</param>
+            <returns>Result status and updated totals.</returns>
+        </member>
+        <member name="M:untitled1.Controllers.CartApiController.ClearCart">
+            <summary>
+            Clear all items from the shopping cart.
+            </summary>
+            <returns>Result status.</returns>
+        </member>
+        <member name="T:untitled1.Controllers.ProductApiController">
+            <summary>
+            Admin REST API for managing movies/products.
+            Requires an active Admin session — log in at /Account/Auth before testing in Swagger.
+            </summary>
+        </member>
+        <member name="M:untitled1.Controllers.ProductApiController.GetAll(System.String,System.Int32,System.Int32)">
+            <summary>
+            Get a paginated list of products with optional title search.
+            </summary>
+            <param name="search">Optional title keyword filter.</param>
+            <param name="page">1-based page number (default: 1).</param>
+            <param name="pageSize">Items per page, capped at 50 (default: 10).</param>
+        </member>
+        <member name="M:untitled1.Controllers.ProductApiController.GetById(System.Int32)">
+            <summary>
+            Get a single product by ID.
+            </summary>
+            <param name="id">Product ID.</param>
+        </member>
+        <member name="M:untitled1.Controllers.ProductApiController.Create(untitled1.Models.DTOs.CreateProductRequest)">
+            <summary>
+            Create a new product.
+            </summary>
+            <param name="request">Product fields. CategoryIds links the movie to existing categories.</param>
+        </member>
+        <member name="M:untitled1.Controllers.ProductApiController.Update(System.Int32,untitled1.Models.DTOs.UpdateProductRequest)">
+            <summary>
+            Update an existing product. Replaces all category links with the supplied CategoryIds.
+            </summary>
+            <param name="id">Product ID to update.</param>
+            <param name="request">Updated product fields.</param>
+        </member>
+        <member name="M:untitled1.Controllers.ProductApiController.Delete(System.Int32)">
+            <summary>
+            Delete a product by ID. Cascades to MovieCategories and Episodes.
+            </summary>
+            <param name="id">Product ID to delete.</param>
+        </member>
+    </members>
+</doc>

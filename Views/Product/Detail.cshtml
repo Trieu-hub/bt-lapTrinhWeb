@@ -281,9 +281,10 @@
             const qty = parseInt(qtyInput ? qtyInput.value : 1) || 1;
             
             $.ajax({
-                url: '/Cart/AddToCart',
+                url: '/api/cart',
                 type: 'POST',
-                data: { id: movieId, quantity: qty },
+                contentType: 'application/json',
+                data: JSON.stringify({ movieId: movieId, quantity: qty }),
                 success: function(response) {
                     if (response.success) {
                         showToast(response.message);
@@ -298,8 +299,9 @@
                         showToast(response.message);
                     }
                 },
-                error: function() {
-                    showToast("Có lỗi xảy ra khi thêm vào giỏ hàng!");
+                error: function(xhr) {
+                    const errMsg = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : "Có lỗi xảy ra khi thêm vào giỏ hàng!";
+                    showToast(errMsg);
                 }
             });
         }
